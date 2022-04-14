@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import { sitePages } from "../settings/sitePages";
 import type { GetServerSideProps, NextPage } from "next";
 import { atom, useRecoilState } from "recoil";
+import { v1 } from 'uuid'
+import Image from 'next/image'
+
 import {
   Container,
   Title,
@@ -11,17 +14,17 @@ import {
   Button,
   SelectContainer,
   Divider,
-} from "./styles";
+} from "../styles/pageStyles";
 import { SEO } from "../settings/seo";
 
+const ufState = atom({
+  key: `${v1()}`,
+  default: undefined,
+});
 const Home: NextPage = ({ siglas }: any) => {
   const statesState = atom({
-    key: "statesState",
+    key: `${v1()}`,
     default: siglas,
-  });
-  const ufState = atom({
-    key: "ufState",
-    default: undefined,
   });
 
   const [states] = useRecoilState(statesState);
@@ -33,7 +36,7 @@ const Home: NextPage = ({ siglas }: any) => {
   return (
     <Container>
       <SEO title={pageSeo.page_title} description={pageSeo?.page_description} />
-      <img src="/logo-tenda.png" alt="Tenda logo" />
+      <Image src="/logo-tenda.png" alt="Tenda logo" />
       <Title>Escolha a Cidade que deseja ver as regiões</Title>
       <Divider />
       <SelectContainer>
@@ -42,8 +45,8 @@ const Home: NextPage = ({ siglas }: any) => {
           id="estados"
           onClick={(e: any) => setUf(e.target.value)}
         >
-          {states.map((a: any) => (
-            <Option key={a.vaue} value={a.value}>
+          {states.map((a: any, index: number) => (
+            <Option key={index} value={a.value}>
               {a.label}
             </Option>
           ))}
@@ -74,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     };
   });
   siglas = siglas.filter(function (sigla: string) {
-    return !this[JSON.stringify(sigla)] && (this[JSON.stringify(sigla)] = true);
+    return !siglas[JSON.stringify(sigla)] && (siglas[JSON.stringify(sigla)] = true);
   }, Object.create(null));
 
   return {

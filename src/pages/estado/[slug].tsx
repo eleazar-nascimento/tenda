@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import Image from 'next/image'
 
 import {
   Container,
@@ -11,7 +12,7 @@ import {
   Region,
   Description,
   Divider,
-} from "./styles";
+} from "../../styles/estadoStyles";
 
 interface IRegionsType {
   ufs: RegionProps;
@@ -29,15 +30,15 @@ const Estado: React.FC<IRegionsType> = ({ ufs, regions }) => {
 
   return (
     <Container>
-      <img src="/logo-tenda.png" alt="Tenda logo" />
+      <Image src="/logo-tenda.png" alt="Tenda logo" />
       <Title>Obrigado!</Title>
       <Description>
         Aqui estão as regioes do estado de {ufs.estado}:
       </Description>
       <Divider />
       <RegionsContainer>
-        {regions.map((region: string) => (
-          <div key={region}>
+        {regions.map((region: string, index: number) => (
+          <div key={index}>
             <Region>{region}</Region>
           </div>
         ))}
